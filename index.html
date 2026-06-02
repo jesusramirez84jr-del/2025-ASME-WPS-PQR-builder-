@@ -3,55 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Custom Tool</title>
-    
+    <title>ASME WPS/PQR Builder</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
             padding: 20px;
-            background-color: #f4f4f9;
+            background-color: #f4f7f6;
+            color: #333;
         }
-        
-        /* This styles your button to make it look professional */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #002b49;
+            border-bottom: 2px solid #002b49;
+            padding-bottom: 5px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        input, select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .btn-container {
+            margin: 20px 0;
+        }
         .action-button {
-            background-color: #007bff;
+            background-color: #002b49;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
         }
-
         .action-button:hover {
-            background-color: #0056b3;
+            background-color: #004475;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
 
-    <h2>Welding & QC Automation Tool</h2>
-    <p>Click the button below to run the calculation or process data:</p>
+<div class="container">
+    <h1>ASME Section IX Document Builder</h1>
+    <p>Fill out the data below to automatically generate your Markdown code blocks.</p>
     
-    <button id="myActionButton" class="action-button">Run Process</button>
+    <h2>1. General & Base Metal Variables</h2>
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="wps_number">WPS Number</label>
+            <input type="text" id="wps_number" value="WPS-101-REV0">
+        </div>
+        <div class="form-group">
+            <label for="revision_number">Revision Number</label>
+            <input type="text" id="revision_number" value="0">
+        </div>
+        <div class="form-group">
+            <label for="wps_date">WPS Date</label>
+            <input type="text" id="wps_date" value="2026-06-02">
+        </div>
+        <div class="form-group">
+            <label for="supporting_pqr">Supporting PQR(s)</label>
+            <input type="text" id="supporting_pqr" value="PQR-101">
+        </div>
+        <div class="form-group">
+            <label for="welding_process">Welding Process</label>
+            <input type="text" id="welding_process" value="GMAW">
+        </div>
+        <div class="form-group">
+            <label for="process_type">Process Type</label>
+            <input type="text" id="process_type" value="Semi-Automatic">
+        </div>
+        <div class="form-group">
+            <label for="p_number">P-Number</label>
+            <input type="text" id="p_number" value="P-No. 1">
+        </div>
+        <div class="form-group">
+            <label for="group_number">Group Number</label>
+            <input type="text" id="group_number" value="Gp-No. 1">
+        </div>
+        <div class="form-group">
+            <label for="material_spec_grade">Material Spec & Grade</label>
+            <input type="text" id="material_spec_grade" value="SA-106 Grade B">
+        </div>
+        <div class="form-group">
+            <label for="thickness_range_groove">Thickness Range Qualified (Groove)</label>
+            <input type="text" id="thickness_range_groove" value="0.0625 in to 0.750 in">
+        </div>
+    </div>
 
+    <h2>2. Filler Metal Variables</h2>
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="f_number">F-Number</label>
+            <input type="text" id="f_number" value="F-No. 6">
+        </div>
+        <div class="form-group">
+            <label for="a_number">A-Number</label>
+            <input type="text" id="a_number" value="A-No. 1">
+        </div>
+        <div class="form-group">
+            <label for="aws_classification">AWS Classification</label>
+            <input type="text" id="aws_classification" value="ER70S-6">
+        </div>
+        <div class="form-group">
+            <label for="sfa_specification">SFA Specification</label>
+            <input type="text" id="sfa_specification" value="SFA-5.18">
+        </div>
+    </div>
 
-    <script>
-        // This listens for a click on your button
-        document.getElementById('myActionButton').addEventListener('click', function() {
-            
-            // Put the action you want to happen right here!
-            alert('Button clicked! Your code logic runs here.');
-            
-            // Example: You can call a custom function here
-            runMyCustomAutomation();
-        });
+    <div class="btn-container">
+        <button id="generateBtn" class="action-button">Generate Document Packages</button>
+    </div>
 
-        function runMyCustomAutomation() {
-            console.log("Automation logic is executing...");
-            // Your custom backend logic/calculations go here
+    <h2>Generated Markdown Output</h2>
+    <textarea id="outputBox" placeholder="Your completed ASME documentation package will generate here..."></textarea>
+</div>
+
+<script>
+    // 1. Define the raw templates inside JavaScript using string templates
+    const wpsTemplate = `# WELDING PROCEDURE SPECIFICATION (WPS)
+*In Compliance with ASME Section IX, QW-482*
+
+**WPS Number:** {{ wps_number }}  
+**Revision:** {{ revision_number }} | **Date:** {{ wps_date }}  
+**Supporting PQR(s):** {{ supporting_pqr }}  
+**Welding Process(es):** {{ welding_process }} | **Type:** {{ process_type }}
+
+---
+
+## BASE METALS (QW-403)
+* **P-Number:** {{ p_number }} **Group No.:** {{ group_number }}
+* **Specification & Grade:** {{ material_spec_grade }}
+* **Thickness Range Qualified:** * **Groove:** {{ thickness_range_groove }}
+
+## FILLER METALS (QW-404)
+* **F-Number:** {{ f_number }} | **A-Number:** {{ a_number }}
+* **AWS Classification:** {{ aws_classification }} | **SFA Specification:** {{ sfa_specification }}`;
+
+    // 2. Listen for the button click
+    document.getElementById('generateBtn').addEventListener('click', function() {
+        
+        // Grab values from input boxes
+        const data = {
+            wps_number: document.getElementById('wps_number').value,
+            revision_number: document.getElementById('revision_number').value,
+            wps_date: document.getElementById('wps_date').value,
+            supporting_pqr: document.getElementById('supporting_pqr').value,
+            welding_process: document.getElementById('welding_process').value,
+            process_type: document.getElementById('process_type').value,
+            p_number: document.getElementById('p_number').value,
+            group_number: document.getElementById('group_number').value,
+            material_spec_grade: document.getElementById('material_spec_grade').value,
+            thickness_range_groove: document.getElementById('thickness_range_groove').value,
+            f_number: document.getElementById('f_number').value,
+            a_number: document.getElementById('a_number').value,
+            aws_classification: document.getElementById('aws_classification').value,
+            sfa_specification: document.getElementById('sfa_specification').value
+        };
+
+        // Substitute the variables in the string template
+        let output = wpsTemplate;
+        for (const key in data) {
+            output = output.replaceAll(`{{ ${key} }}`, data[key]);
         }
-    </script>
+
+        // Output the result to the big text block
+        document.getElementById('outputBox').value = output;
+    });
+</script>
 
 </body>
 </html>
