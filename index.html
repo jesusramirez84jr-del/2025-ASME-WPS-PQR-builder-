@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Custom Tool</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        
+        /* This styles your button to make it look professional */
+        .action-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Welding & QC Automation Tool</h2>
+    <p>Click the button below to run the calculation or process data:</p>
+    
+    <button id="myActionButton" class="action-button">Run Process</button>
+
+
+    <script>
+        // This listens for a click on your button
+        document.getElementById('myActionButton').addEventListener('click', function() {
+            
+            // Put the action you want to happen right here!
+            alert('Button clicked! Your code logic runs here.');
+            
+            // Example: You can call a custom function here
+            runMyCustomAutomation();
+        });
+
+        function runMyCustomAutomation() {
+            console.log("Automation logic is executing...");
+            // Your custom backend logic/calculations go here
+        }
+    </script>
+
+</body>
+</html>
